@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 11:41:13 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/07 13:45:33 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/07 22:02:00 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ void	exit_with_err(void);
 char	**parse_path(char **envp);
 void	get_exe(t_exe *exe, char *argv, char **paths);
 void	free_double_ptr(char **lists);
+void	access_err(char *exe_name, t_pipe_info info);
+void	open_err(char *file_name, t_pipe_info info);
 
 #endif
