@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:06:51 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/07 11:41:51 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:52:17 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,27 @@ static char	*get_path(char **envp)
 
 char	**parse_path(char **envp)
 {
+	char	*tmp;
 	char	*path;
 	char	**paths;
+	int		idx;
 
+	idx = 0;
 	path = get_path(envp);
 	if (!path)
 		exit_with_err();
 	paths = ft_split(path, ':');
 	if (!paths)
 		exit_with_err();
+	while (paths[idx])
+	{
+		tmp = ft_strjoin(paths[idx], "/");
+		if (!tmp)
+			exit_with_err();
+		free(paths[idx]);
+		paths[idx] = tmp;
+		idx++;
+	}
 	return (paths);
 }
 
@@ -65,22 +77,23 @@ char	*find_path(char *file_name, char **paths)
 	return (file_path);
 }
 
-void	get_exe(t_exe *exe, char *argv, char **paths)
+void	get_exe(t_exe *exe, int idx, t_pipe_info *info)
 {
-	char	*file_name;
 	char	*file_path;
 
-	exe->args = ft_split(argv, ' ');
+	exe->args = ft_split(info->argv[idx], ' ');
 	if (!exe->args)
 		exit_with_err();
 	exe->path = ft_strdup(exe->args[0]);
 	if (!exe->path)
 		exit_with_err();
-	file_name = ft_strjoin("/", exe->path);
-	if (!file_name)
-		exit_with_err();
-	file_path = find_path(file_name, paths);
-	free(file_name);
+	if (ft_strncmp(exe->path, "./", 2) == 0)
+	{
+		if (access(ft_strchr(exe->path, '/') + 1, X_OK))
+			exit_with_str(info, exe->args[0]);
+		return ;
+	}
+	file_path = find_path(exe->path, info->paths);
 	if (file_path)
 	{
 		free(exe->path);
