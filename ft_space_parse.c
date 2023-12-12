@@ -6,13 +6,21 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/10 15:21:04 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/10 15:31:20 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:31:26 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_pipex.h"
 
-static char	*backslash_deleter(char *str)
+int	is_space(char c)
+{
+	if (c == '\t' || c == '\n' || c == '\v' \
+		|| c == '\f' || c == '\r' || c == ' ')
+		return (1);
+	return (0);
+}
+
+static char	*trim_backslash(char *str)
 {
 	int		i;
 	int		j;
@@ -41,100 +49,101 @@ static char	*backslash_deleter(char *str)
 	return (result);
 }
 
-static int	count_word(size_t org_len, char *tmp)
+static void	count_word(t_split_info *info)
 {
 	size_t	idx;
 	int		flag;
-	int		word_cnt;
 
 	idx = 0;
-	word_cnt = 0;
-	while (idx < org_len)
+	info->word_cnt = 0;
+	while (idx < info->str_len)
 	{
-		if (tmp[idx] == '\'' || tmp[idx] == '\"')
+		if (info->str[idx] == '\'' || info->str[idx] == '\"')
 		{
-			flag = tmp[idx];
-			word_cnt++;
-			tmp[idx++] = 0;
-			while (idx < org_len && tmp[idx] != flag)
+			flag = info->str[idx];
+			info->word_cnt++;
+			info->str[idx++] = 0;
+			while (idx < info->str_len && info->str[idx] != flag)
 				idx++;
-			tmp[idx++] = 0;
+			info->str[idx++] = 0;
 		}
-		else if (!is_space(tmp[idx]))
+		else if (!is_space(info->str[idx]))
 		{
-			word_cnt++;
-			while (idx < org_len && !is_space(tmp[idx]))
+			info->word_cnt++;
+			while (idx < info->str_len && !is_space(info->str[idx]))
 				idx++;
 		}
 		else
-			tmp[idx++] = 0;
+			info->str[idx++] = 0;
 	}
-	return (word_cnt);
 }
 
-static char	**clean(char **str_arr, char *str, size_t size)
+static void free_err(t_split_info *info, int idx)
 {
-	size_t	idx;
+	int	i;
 
-	idx = 0;
-	while (idx < size)
+	i = 0;
+	while (i < idx)
 	{
-		free(str_arr[idx]);
-		str_arr[idx] = NULL;
-		idx++;
+		free(info->result[i]);
+		info->result[i] = NULL;
+		i++;
 	}
-	free(str_arr);
-	free(str);
-	str = NULL;
-	return (NULL);
+	free(info->result);
+	free(info->str);
+	info->str = NULL;
+	return ;
 }
 
-void	str_to_arr(size_t org_len, char *str)
+void	str_to_arr(t_split_info *info)
 {
 	size_t	idx;
-	size_t	word_idx;
+	int		word_idx;
 
 	idx = 0;
 	word_idx = 0;
-	while (idx < org_len)
+	while (idx < info->str_len)
 	{
-		if (str[idx])
+		if (info->str[idx])
 		{
-			split->result[word_idx] = backslash_deleter(&str[idx]);
-			if (!split->result[word_idx])
+			info->result[word_idx] = trim_backslash(&info->str[idx]);
+			if (!info->result[word_idx])
 			{
-				clean(split->result, str, word_idx);
+				free_err(info, word_idx);
 				return ;
 			}
 			word_idx++;
-			while (str[idx] && idx < org_len)
+			while (info->str[idx] && idx < info->str_len)
 				idx++;
 		}
 		else
 			idx++;
 	}
-	free(str);
+	free(info->str);
 }
 
-char	**new_split(char *s)
+char	**ft_exe_split(char *str)
 {
-	size_t	org_len;
-	int		word_cnt;
-	char	*result;
-	char	*tmp;
+	t_split_info	info;
 
-	org_len = ft_strlen(s);
-	tmp = ft_strdup(s);
-	if (!tmp)
+	info.str_len = ft_strlen(str);
+	info.str = ft_strdup(str);
+	if (!info.str)
 		return (NULL);
-	word_cnt = count_word(org_len, tmp);
-	result = (char **)ft_calloc(word_cnt + 1, sizeof(char *));
-	if (!result)
+	count_word(&info);
+	info.result = (char **)ft_calloc(info.word_cnt + 1, sizeof(char *));
+	if (!info.result)
 	{
-		free(tmp);
-		tmp = NULL;
+		free(info.str);
+		info.str = NULL;
 		return (NULL);
 	}
-	str_to_arr(&tmp);
-	return (result);
+	str_to_arr(&info);
+	return (info.result);
+}
+int main(int argc, char *argv[])
+{
+	char **ptr = ft_exe_split(argv[1]);
+	for (int i = 0 ; ptr[i] ; i++)
+		printf("%s\n", ptr[i]);
 }

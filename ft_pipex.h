@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 11:41:13 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/10 14:41:52 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:14:34 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ typedef struct s_pipe_info
 	char	**paths;
 	char	**envp;
 }	t_pipe_info;
+
+typedef struct s_split_info
+{
+	size_t	str_len;
+	char	*str;
+	int 	word_cnt;
+	char	**result;
+}	t_split_info;
 
 void	exit_with_err(void);
 void	exit_with_str(t_pipe_info *info, char *str);
