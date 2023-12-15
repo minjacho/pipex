@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 11:41:13 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/15 11:11:10 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/15 13:38:59 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
-# include <stdio.h> // perror
-# include <string.h> // strerror
+# include <string.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
-# include "libft/libft.h"
+# include "libft.h"
 
 typedef struct s_exe
 {
@@ -51,7 +50,7 @@ typedef struct s_split_info
 }	t_split_info;
 
 void	exit_with_err(void);
-void	exit_with_str(t_pipe_info *info, char *str);
+void	exit_with_str(t_pipe_info *info, char *str, int custom_errno);
 char	**parse_path(char **envp);
 void	get_exe(t_exe *exe, int idx, t_pipe_info *info);
 void	free_double_ptr(char **lists);
