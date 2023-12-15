@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := all
-SRCS = ft_pipe.c ft_parser.c ft_err_handle.c
+SRCS = ft_pipe.c ft_parser.c ft_err_handle.c ft_split_parse.c ft_split_parse_utill.c
 LIBFT_DIR = ./libft
 LIBFT_NAME = ft
 LIBFT = libft/libft.a

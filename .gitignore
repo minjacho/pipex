@@ -5,3 +5,8 @@ a.out*
 *.d
 outfile
 infile
+.vscode
+*.a
+*.sh
+pipex
+

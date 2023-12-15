@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 11:41:13 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/12 14:14:34 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:11:10 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_split_info
 {
 	size_t	str_len;
 	char	*str;
-	int 	word_cnt;
+	int		word_cnt;
 	char	**result;
 }	t_split_info;
 
@@ -58,4 +58,8 @@ void	free_double_ptr(char **lists);
 void	access_err(char *exe_name, t_pipe_info *info);
 void	open_err(char *file_name, t_pipe_info *info);
 
+char	**ft_exe_split(char *str);
+int		is_space(char c);
+void	free_err(t_split_info *info, int idx);
+char	*trim_backslash(char *str);
 #endif

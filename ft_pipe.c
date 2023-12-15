@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 13:32:32 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/10 14:42:23 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:18:26 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ void	dup_file_to_fd(t_pipe_info *info, char *name, int fd, int open_flag)
 	int	file_fd;
 
 	if (fd == STDOUT_FILENO)
+	{
 		file_fd = open(name, open_flag, 0644);
+		if (access(name, W_OK) < 0)
+			exit_with_str(info, name);
+	}
 	else
 		file_fd = open(name, open_flag);
 	if (file_fd < 0)

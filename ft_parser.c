@@ -6,7 +6,7 @@
 /*   By: minjacho <minjacho@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:06:51 by minjacho          #+#    #+#             */
-/*   Updated: 2023/12/10 14:52:17 by minjacho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:10:30 by minjacho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	get_exe(t_exe *exe, int idx, t_pipe_info *info)
 {
 	char	*file_path;
 
-	exe->args = ft_split(info->argv[idx], ' ');
+	exe->args = ft_exe_split(info->argv[idx]);
 	if (!exe->args)
 		exit_with_err();
 	exe->path = ft_strdup(exe->args[0]);
